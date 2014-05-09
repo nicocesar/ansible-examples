@@ -6,9 +6,20 @@
    - MySQL-python
    - libselinux-python
    - libsemanage-python
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Install Mysql package
+  apt: name={{ item }} state=present
+  with_items:
+   - mysql-server
+   - python-mysqldb
+   - python-selinux
+   - python-semanage
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Configure SELinux to start mysql on any port
   seboolean: name=mysql_connect_any state=true persistent=yes
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Create Mysql configuration file
   template: src=my.cnf.j2 dest=/etc/my.cnf
@@ -17,3 +28,8 @@
 
 - name: Start Mysql Service
   service: name=mysqld state=started enabled=true
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Start Mysql Service
+  service: name=mysql state=started enabled=true
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
