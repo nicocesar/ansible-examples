@@ -20,7 +20,11 @@
   notify: restart iptables
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
+- name: Install iptables-persistent for GNU/Debian
+  apt: name=iptables-persistent state=present
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' 
+
 - name: Set up iptables rules
-  copy: src=iptables-save dest=/etc/default/iptables-rules
-  notify: restart iptables
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  copy: src=iptables-save dest=/etc/iptables/rules.v4
+  notify: restart iptables-persistent
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' 

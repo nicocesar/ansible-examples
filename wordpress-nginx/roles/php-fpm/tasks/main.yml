@@ -37,11 +37,12 @@
 
 - name: Disable default pool
   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled
-  notify: restart php-fpm
+  notify: restart php5-fpm
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
  
 - name: Copy php-fpm configuration
-  template: src=wordpress.conf dest=/etc/php5/fpm/pool.d
-  notify: restart php-fpm
+  template: src=wordpress-debian.conf dest=/etc/php5/fpm/pool.d
+  notify: restart php5-fpm
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
 

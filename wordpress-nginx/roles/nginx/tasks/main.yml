@@ -10,3 +10,11 @@
 - name: Copy nginx configuration for wordpress
   template: src=default.conf dest=/etc/nginx/conf.d/default.conf
   notify: restart nginx
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Copy nginx configuration for wordpress
+  template: src=default.conf dest=/etc/nginx/sites-available/default
+  notify: restart nginx
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+
